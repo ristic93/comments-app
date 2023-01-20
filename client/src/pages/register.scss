@@ -1,0 +1,35 @@
+.register {
+    border: 2px solid #fff;
+    padding: 50px 80px;
+    border-radius: 20px;
+    h2 {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+      font-size: 2.5rem;
+      &::after {
+          content: "";
+          display: block;
+          height: 3px;
+          width: 10%;
+          margin: 10px auto;
+          background-color: #fff;
+      }
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+  
+    }
+    button {
+      margin-top: 10px;
+    }
+    p {
+        color: #fff;
+        margin-top: 15px;
+        a {
+            color: #fff;
+        }
+    }
+  }
+  

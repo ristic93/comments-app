@@ -1,0 +1,35 @@
+.form-group {
+    margin-bottom: 15px;
+    .form-label {
+      font-size: 1.2rem;
+      color: #fff;
+      margin-bottom: 5px;
+    }
+    .custom-input {
+      width: 400px;
+      outline: none;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      @media (min-width: 320px) and (max-width: 593px) {
+        width: 180px;
+      }
+    }
+    .custom-textarea {
+      width: 400px;
+      min-height: 150px;
+      outline: none;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      @media (min-width: 320px) and (max-width: 593px) {
+        width: 180px;
+      }
+    }
+    .custom-input::placeholder,
+    .custom-textarea::placeholder {
+      font-style: italic;
+      font-weight: bold;
+    }
+  }
+  
