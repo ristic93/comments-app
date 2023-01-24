@@ -25,12 +25,17 @@ const Register = () => {
     const url = `${BACKEND_API}/register`;
     const jsonBody = JSON.stringify(formData);
 
-    const response = await fetch(url, {
-      method: "POST",
-      body: jsonBody,
-    });
-    if (response.status === 200) {
-      navigate("/login");
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: jsonBody,
+      });
+
+      if (response.status === 200) {
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -42,6 +47,7 @@ const Register = () => {
           type="text"
           label="First name"
           id="firstName"
+          placeholder="ex. John"
           value={formData.firstName}
           onChange={handleInput}
         />
@@ -49,6 +55,7 @@ const Register = () => {
           type="text"
           label="Last name"
           id="lastName"
+          placeholder="ex. Doe"
           value={formData.lastName}
           onChange={handleInput}
         />
@@ -56,6 +63,7 @@ const Register = () => {
           type="text"
           label="Username"
           id="username"
+          placeholder="ex. JohnDoe123"
           value={formData.username}
           onChange={handleInput}
         />
