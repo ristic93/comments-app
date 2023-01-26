@@ -8,20 +8,15 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
-  const handleInput = (e) => {
-    const _formData = { ...formData };
-    _formData[e.target.id] = e.target.value;
-    setFormData(_formData);
-  };
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
     const url = `${BACKEND_API}/auth`;
-    const jsonBody = JSON.stringify(formData);
+    const jsonBody = JSON.stringify({
+      username: username,
+      password: password,
+    });
 
     try {
       const response = await fetch(url, {
@@ -53,15 +48,15 @@ const Login = () => {
           label="Username"
           id="username"
           placeholder="ex. JohnDoe123"
-          onChange={handleInput}
-          value={formData.username}
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
         />
         <TextInput
           type="password"
           label="Password"
           id="password"
-          onChange={handleInput}
-          value={formData.password}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
         />
       </form>
       <Button onClick={handleSubmit}>Log in</Button>

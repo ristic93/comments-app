@@ -10,23 +10,24 @@ import audio_pop from "../assets/pop-sound.mp3";
 
 const Comments = () => {
   const [comments, setComments] = useState([]);
-  const [formData, setFormData] = useState({
+
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+
+  const [editCom, setEditCom] = useState({
+    mode: false,
+    id: "",
     title: "",
     content: "",
   });
 
-  const [editedCom, setEditedCom] = useState({});
-
-  const handleInput = (e) => {
-    const _formData = { ...formData };
-    _formData[e.target.id] = e.target.value;
-    setFormData(_formData);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = `${BACKEND_API}/api/v1/comments`;
-    const jsonBody = JSON.stringify(formData);
+    const jsonBody = JSON.stringify({
+      title: title,
+      content: content,
+    });
 
     const token = JSON.parse(localStorage.getItem("token"));
     const headers = { Authorization: `Bearer ${token}` };
@@ -37,13 +38,15 @@ const Comments = () => {
         body: jsonBody,
         headers: headers,
       });
+
       const data = await response.json();
 
       if (response.status === 200) {
-        setFormData(data);
+        setTitle(data.title);
+        setContent(data.content);
       }
 
-      if (formData.title === "" || formData.content === "") {
+      if (title === "" || content === "") {
         alert("First you must fill input section");
       }
 
@@ -94,9 +97,12 @@ const Comments = () => {
     }
   };
 
-  const editComment = async (id) => {
+  const editComment = async (id, idx) => {
     const url = `${BACKEND_API}/api/v1/comments/${id}`;
-    const jsonBody = JSON.stringify(formData);
+    const jsonBody = JSON.stringify({
+      title: title,
+      content: content,
+    });
 
     const token = JSON.parse(localStorage.getItem("token"));
     const headers = { Authorization: `Bearer ${token}` };
@@ -108,28 +114,46 @@ const Comments = () => {
         headers: headers,
       });
 
-      let data = await response.json();
-      if (response.status === 200) {
-        setEditedCom(data);
-        console.log(data);
-      }
+      setEditCom({
+        mode: true,
+        id: comments[idx].id,
+        title: comments[idx].title,
+        content: comments[idx].content,
+      });
     } catch (err) {
       console.log(err);
     }
+  };
 
-    // const url2 = `${BACKEND_API}/api/v1/comments`;
+  useEffect(() => {
+    setTitle(editCom.title);
+    setContent(editCom.content);
+  }, [editCom]);
 
-    // const response2 = await fetch(url2, {
-    //   method: "GET",
-    //   headers: headers,
-    // });
+  const exitEditMode = () => {
+    setEditCom({
+      mode: false,
+      id: "",
+      title: "",
+      content: "",
+    });
+  };
 
-    // const newData = await response2.json()
-    // console.log(newData)
+  const updateEditMode = () => {
+    let tempComments = [...comments];
+    tempComments.forEach((com, idx) => {
+      if (editCom.id === com.id) {
+        tempComments[idx].title = title;
+        tempComments[idx].content = content;
+      }
+    });
 
-    // if (response.status === 200) {
-    //   setEditedCom({title: "tralala", content: "blablabla"});
-    // }
+    setEditCom({
+      mode: false,
+      id: "",
+      title: "",
+      content: "",
+    });
   };
 
   const playAudioError = () => {
@@ -149,38 +173,54 @@ const Comments = () => {
     <section className="page-container">
       {/* add comments section */}
 
-      <article className="add-comment-form">
-        <h2>Add new comment</h2>
-        <form onSubmit={handleSubmit}>
-          <TextInput
-            type="text"
-            label="User"
-            id="title"
-            placeholder="ex. John Doe"
-            onChange={handleInput}
-            value={formData.title}
-          />
-          <TextArea
-            label="Comment"
-            id="content"
-            placeholder="ex. Lorem ipsum dolor sit amet"
-            onChange={handleInput}
-            value={formData.content}
-          />
-          <Button onClick={() => removeElement()}>Add comment</Button>
-        </form>
-      </article>
+      {!editCom.mode ? (
+        <article className="add-comment-form">
+          <h2>Add new comment</h2>
+          <form onSubmit={handleSubmit}>
+            <TextInput
+              type="text"
+              label="User"
+              id="title"
+              placeholder="ex. John Doe"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+            />
+            <TextArea
+              label="Comment"
+              id="content"
+              placeholder="ex. Lorem ipsum dolor sit amet"
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
+            />
+            <Button onClick={() => removeElement()}>Add comment</Button>
+          </form>
+        </article>
+      ) : (
+        <article className="add-comment-form">
+          <h2>Edit comment</h2>
+          <form>
+            <TextInput
+              type="text"
+              label="User"
+              id="title"
+              onChange={(e) => setTitle(e.target.value)}
+              value={title}
+            />
+            <TextArea
+              label="Comment"
+              id="content"
+              onChange={(e) => setContent(e.target.value)}
+              value={content}
+            />
+            <div className="cta">
+              <Button onClick={updateEditMode}>Update comment</Button>
+              <Button onClick={exitEditMode}>Get back</Button>
+            </div>
+          </form>
+        </article>
+      )}
 
       {/* edit comments section */}
-
-      {/* <article className="add-comment-form">
-        <h2>Add new comment</h2>
-        <form>
-          <TextInput type="text" label="User" id="title" />
-          <TextArea label="Comment" id="content" />
-          <Button>Add comment</Button>
-        </form>
-      </article> */}
 
       <article className="comments-header">
         <h1>Comments</h1>
@@ -212,7 +252,7 @@ const Comments = () => {
 
         {/* real comments */}
 
-        {comments.map((com) => {
+        {comments.map((com, idx) => {
           return (
             <div className="comments-content" key={com.id}>
               <div className="header-content">
@@ -224,7 +264,7 @@ const Comments = () => {
                 <AiOutlineEdit
                   className="icon"
                   onClick={() => {
-                    editComment(com.id);
+                    editComment(com.id, idx);
                     playAudioPop();
                   }}
                 />

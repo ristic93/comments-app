@@ -15,6 +15,12 @@
   }
 }
 
+.cta {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 .comments-header {
   display: flex;
   flex-direction: column;

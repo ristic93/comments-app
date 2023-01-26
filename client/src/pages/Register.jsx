@@ -8,22 +8,19 @@ import { BACKEND_API } from "../environment/Api";
 const Register = () => {
   const navigate = useNavigate();
 
-  const [formData, SetFormData] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    password: "",
-  });
-
-  const handleInput = (e) => {
-    const _formData = { ...formData };
-    _formData[e.target.id] = e.target.value;
-    SetFormData(_formData);
-  };
+  const [firstName, setFristName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
     const url = `${BACKEND_API}/register`;
-    const jsonBody = JSON.stringify(formData);
+    const jsonBody = JSON.stringify({
+      firstname: firstName,
+      lastname: lastName,
+      username: username,
+      password: password,
+    });
 
     try {
       const response = await fetch(url, {
@@ -48,31 +45,31 @@ const Register = () => {
           label="First name"
           id="firstName"
           placeholder="ex. John"
-          value={formData.firstName}
-          onChange={handleInput}
+          onChange={(e) => setFristName(e.target.value)}
+          value={firstName}
         />
         <TextInput
           type="text"
           label="Last name"
           id="lastName"
           placeholder="ex. Doe"
-          value={formData.lastName}
-          onChange={handleInput}
+          onChange={(e) => setLastName(e.target.value)}
+          value={lastName}
         />
         <TextInput
           type="text"
           label="Username"
           id="username"
           placeholder="ex. JohnDoe123"
-          value={formData.username}
-          onChange={handleInput}
+          onChange={(e) => setUsername(e.target.value)}
+          value={username}
         />
         <TextInput
           type="password"
           label="Password"
           id="password"
-          value={formData.password}
-          onChange={handleInput}
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
         />
       </form>
       <Button onClick={handleSubmit}>Submit</Button>
