@@ -1,4 +1,4 @@
-# comments-app
+# Comments-app
 
 In order to make this app I worked with React.js & SASS used Vite.js as module bundler. Also worked with JWT token for authentication & HTTP request methods - GET, POST, PUT & DELETE for posting, editing and deleting comments.
 
