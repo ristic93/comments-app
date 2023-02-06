@@ -1,6 +1,6 @@
 # Comments-app
 
-In order to make this app I worked with React.js & SASS used Vite.js as module bundler. Also worked with JWT token for authentication & HTTP request methods - GET, POST, PUT & DELETE for posting, editing and deleting comments.
+In order to make this app I worked with React.js & SASS used Vite.js as module bundler. Used a backend server for fetching data, also worked with JWT token for user authentication & HTTP request methods - GET, POST, PUT & DELETE for posting, editing and deleting comments.
 
 ## If you want to start the app:
 
